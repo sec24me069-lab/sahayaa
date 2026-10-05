@@ -100,11 +100,11 @@ export function CinematicIntro() {
     <main className="relative h-screen w-screen overflow-hidden bg-background font-display" aria-label="SAHAAYA brand introduction">
       <div className="absolute inset-0 transition-transform duration-1000 ease-in" style={{ transform: leaving ? "scale(4)" : undefined, opacity: leaving ? 0 : 1, transition: "transform 1.1s cubic-bezier(.7,0,.3,1), opacity 1.1s ease-in" }}>
         {/* Scene 1 — universe */}
-        <img src={universe} alt="" className="absolute inset-[-4%] h-[108%] w-[108%] object-cover" style={{ opacity: uni, transform: `${px(-14)} scale(${rm ? 1 : 1 + t * 0.012})` }} />
+        <img src={universe} alt="" className="absolute left-[-4%] top-[-4%] h-[108%] w-[108%] max-w-none object-cover" style={{ opacity: uni, transform: `${px(-14)} scale(${rm ? 1 : 1 + t * 0.012})` }} />
         {/* Scene 3–5 — black hole */}
-        <img src={blackhole} alt="" className="absolute inset-[-4%] h-[108%] w-[108%] object-cover" style={{ opacity: bh, transform: `${px(-20)} scale(${rm ? 1.05 : 1.25 - ss(2, 6, t) * 0.15}) rotate(${rm ? 0 : (t - 2) * -0.6}deg)` }} />
+        <img src={blackhole} alt="" className="absolute left-[-4%] top-[-4%] h-[108%] w-[108%] max-w-none object-cover" style={{ opacity: bh, transform: `${px(-20)} scale(${rm ? 1.05 : 1.25 - ss(2, 6, t) * 0.15}) rotate(${rm ? 0 : (t - 2) * -0.6}deg)` }} />
         {/* Scene 8+ — horizon */}
-        <img src={horizon} alt="" className="absolute inset-[-4%] h-[108%] w-[108%] object-cover" style={{ opacity: hz, transform: `${px(-10)} scale(${rm ? 1 : lerp(1.12, 1, ss(6.5, 12, t))})` }} />
+        <img src={horizon} alt="" className="absolute left-[-4%] top-[-4%] h-[108%] w-[108%] max-w-none object-cover" style={{ opacity: hz, transform: `${px(-10)} scale(${rm ? 1 : lerp(1.12, 1, ss(6.5, 12, t))})` }} />
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 35%, var(--cosmic-black) 100%)", opacity: 0.85 }} />
         <div className="absolute inset-0" style={{ background: "radial-gradient(circle at 50% 50%, oklch(0.9 0.08 350 / 0.5), transparent 45%)", opacity: glowCenter * 0.7 }} />
 
@@ -145,17 +145,18 @@ export function CinematicIntro() {
         <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ transform: px(3) }}>
           <div ref={logoRef} className="relative" style={{ transform: `translateY(${lerp(0, -4, ss(9, 11, t))}vh) scale(${lerp(1.08, 0.82, settle)})` }}>
             {/* orbital ring */}
-            <div className="absolute left-1/2 top-1/2 h-[118%] w-[118%] -translate-x-1/2 -translate-y-1/2 rounded-full border" style={{ opacity: ring * 0.6, borderColor: "oklch(0.8 0.15 340 / 0.5)", boxShadow: "0 0 30px oklch(0.68 0.24 354 / 0.25), inset 0 0 30px oklch(0.66 0.24 305 / 0.15)", transform: `translate(-50%,-50%) scale(${lerp(0.85, 1, ring)})` }} />
+            <div className="absolute left-1/2 top-1/2 h-[118%] w-[118%] rounded-full border" style={{ opacity: ring * 0.6, borderColor: "oklch(0.8 0.15 340 / 0.5)", boxShadow: "0 0 30px oklch(0.68 0.24 354 / 0.25), inset 0 0 30px oklch(0.66 0.24 305 / 0.15)", transform: `translate(-50%,-50%) scale(${lerp(0.85, 1, ring)})` }} />
             <div className={done && !rm ? "animate-breathe" : undefined}>
               <div className="relative overflow-hidden" style={{
                 width: "min(46vmin, 420px)", aspectRatio: "1",
                 opacity: logoReveal,
-                clipPath: rm ? undefined : `inset(0 0 ${(1 - logoReveal) * 100}% 0)`,
+                maskImage: rm ? undefined : `linear-gradient(to bottom, #000 ${logoReveal * 120 - 20}%, transparent ${logoReveal * 120}%)`,
+                WebkitMaskImage: rm ? undefined : `linear-gradient(to bottom, #000 ${logoReveal * 120 - 20}%, transparent ${logoReveal * 120}%)`,
                 filter: `drop-shadow(0 0 ${lerp(30, 14, settle)}px oklch(0.68 0.24 354 / 0.55))`,
                 transform: `scale(${lerp(0.9, 1, logoReveal)})`,
               }}>
                 <img src={flamingo} alt="SAHAAYA flamingo brandmark" width={1024} height={1024} className="h-full w-full object-contain" />
-                {t > 7 && <div className="animate-shine pointer-events-none absolute inset-y-[-20%] left-0 w-1/4" style={{ background: "linear-gradient(90deg, transparent, oklch(1 0 0 / 0.35), transparent)", mixBlendMode: "overlay" }} />}
+                {t > 7 && <div className="absolute inset-0" style={{ maskImage: `url(${flamingo})`, WebkitMaskImage: `url(${flamingo})`, maskSize: "contain", WebkitMaskSize: "contain" }}><div className="animate-shine pointer-events-none absolute inset-y-[-20%] left-0 w-1/4" style={{ background: "linear-gradient(90deg, transparent, oklch(1 0 0 / 0.35), transparent)", mixBlendMode: "overlay" }} /></div>}
               </div>
             </div>
           </div>
@@ -165,7 +166,7 @@ export function CinematicIntro() {
 
           {/* wordmark */}
           <div className="relative mt-[2vh]" style={{ opacity: ss(9.5, 10, t) }}>
-            <h1 className="flex select-none text-[11vw] font-extralight tracking-[0.32em] sm:text-7xl md:text-8xl" aria-label="SAHAAYA">
+            <h1 className="-mr-[0.32em] flex select-none text-[11vw] font-extralight tracking-[0.32em] sm:text-7xl md:text-8xl" aria-label="SAHAAYA">
               {LETTERS.map((l, i) => {
                 const at = (i + 0.5) / LETTERS.length;
                 const k = rm ? ss(9.6, 11, t) : clamp((sweepX - at + 0.12) / 0.12);
