@@ -55,7 +55,7 @@ export function FeatherTrail({ intensityRef, targetRef }: { intensityRef: React.
             vy: Math.sin(ang + Math.PI / 2) * side + 0.05,
             s: (speed > 1.2 ? 9 : 6) + Math.random() * 7,
             born: now, life: 700 + Math.random() * 500,
-            hue: HUES[(Math.random() * HUES.length) | 0], spin: (Math.random() - 0.5) * 0.004, burst,
+            hue: HUES[(Math.random() * HUES.length) | 0]!, spin: (Math.random() - 0.5) * 0.004, burst,
           });
         }
         while (feathers.length > 36) feathers.shift();
@@ -91,7 +91,7 @@ export function FeatherTrail({ intensityRef, targetRef }: { intensityRef: React.
       const k = intensityRef.current;
       const tgt = targetRef.current;
       for (let i = feathers.length - 1; i >= 0; i--) {
-        const f = feathers[i];
+        const f = feathers[i]!;
         const p = (now - f.born) / f.life;
         if (p >= 1) {
           const n = 2 + ((Math.random() * 3) | 0);
@@ -108,7 +108,7 @@ export function FeatherTrail({ intensityRef, targetRef }: { intensityRef: React.
         if (k > 0) drawFeather(f, p, k);
       }
       for (let i = dust.length - 1; i >= 0; i--) {
-        const d = dust[i];
+        const d = dust[i]!;
         const p = (now - d.born) / d.life;
         if (p >= 1) { dust.splice(i, 1); continue; }
         d.x += d.vx; d.y += d.vy;
