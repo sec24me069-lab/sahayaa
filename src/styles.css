@@ -73,7 +73,7 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { background-color: var(--color-background); color: var(--color-foreground); overflow: hidden; }
+  html, body { background-color: var(--color-background); color: var(--color-foreground); }
 }
 
 @utility font-display { font-family: var(--font-display); }
@@ -108,4 +108,12 @@
 @utility animate-shine { animation: shine 4.5s cubic-bezier(.6,0,.3,1) infinite; }
 @media (prefers-reduced-motion: reduce) {
   .animate-breathe, .animate-shine { animation: none; }
+}
+
+@utility cosmic-card {
+  background: linear-gradient(160deg, oklch(0.2 0.08 300 / 0.55), oklch(0.14 0.05 275 / 0.6));
+  border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  transition: border-color .5s, transform .5s, box-shadow .5s;
+  &:hover { border-color: oklch(0.8 0.15 340 / 0.5); transform: translateY(-4px); box-shadow: 0 20px 50px -20px oklch(0.68 0.24 354 / 0.45); }
 }
