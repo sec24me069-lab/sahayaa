@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getScheme } from "@/lib/schemes";
+import { SchemeQA } from "@/components/SchemeQA";
 
 export const Route = createFileRoute("/schemes/$slug")({
   loader: ({ params }) => {
@@ -78,6 +79,19 @@ function SchemePage() {
           <Block n="02" title="BENEFITS" items={s.benefits} />
           <Block n="03" title="DOCUMENTS" items={s.documents} />
           <Block n="04" title="HOW TO APPLY" items={s.steps} ordered />
+        </div>
+
+        <SchemeQA key={s.slug} slug={s.slug} name={s.name} />
+
+        <div className="mt-10 rounded-2xl border p-5 text-sm font-light">
+          <p>
+            <span className="text-[10px] tracking-[0.3em] text-muted-foreground">SOURCE </span>
+            <a href={s.source} target="_blank" rel="noopener noreferrer" className="break-all text-primary underline-offset-4 hover:underline">{s.source.replace(/^https?:\/\//, "")}</a>
+          </p>
+          <p className="mt-2">
+            <span className="text-[10px] tracking-[0.3em] text-muted-foreground">LAST VERIFIED </span>
+            {s.verifiedOn ? new Date(s.verifiedOn).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : <span className="text-accent">Not yet verified against the official source</span>}
+          </p>
         </div>
 
         <div className="mt-10 flex flex-wrap items-center gap-6 border-t pt-10">
