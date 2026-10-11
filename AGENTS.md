@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep the shared language provider above the route outlet and translate display labels without changing canonical scheme/filter identifiers, so navigation and filtering remain consistent across languages.
+- Scheme translations preserve canonical source and verification fields; language-specific official evidence must be supplied before a translation is presented as official.

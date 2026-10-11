@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { I18nProvider } from "@/lib/i18n";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -87,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;500&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;500&family=Noto+Sans+Tamil:wght@300;400;500&family=Noto+Sans+Devanagari:wght@300;400;500&display=swap" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
   }),
@@ -116,8 +117,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      {/* Required: nested routes render here. Removing <I18nProvider><Outlet /></I18nProvider> breaks all child routes. */}
+      <I18nProvider><Outlet /></I18nProvider>
     </QueryClientProvider>
   );
 }
