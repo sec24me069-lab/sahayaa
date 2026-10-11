@@ -1,3 +1,5 @@
+import { localizeScheme, useI18n } from "@/lib/i18n";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getScheme } from "@/lib/schemes";
 import { SchemeQA } from "@/components/SchemeQA";
@@ -27,10 +29,11 @@ export const Route = createFileRoute("/schemes/$slug")({
 });
 
 function SchemeNotFound() {
+  const { t } = useI18n();
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background font-display">
-      <p className="text-muted-foreground">We couldn't find that scheme.</p>
-      <Link to="/home" className="text-xs tracking-[0.3em] text-primary">← ALL SCHEMES</Link>
+      <p className="text-muted-foreground">{t("notFound")}</p>
+      <Link to="/home" className="text-xs tracking-[0.3em] text-primary">{t("allSchemes")}</Link>
     </main>
   );
 }
@@ -55,18 +58,21 @@ function Block({ n, title, items, ordered }: { n: string; title: string; items: 
 }
 
 function SchemePage() {
-  const { scheme: s } = Route.useLoaderData();
-  const age = s.minAge != null && s.maxAge != null ? `${s.minAge}–${s.maxAge} years` : s.minAge != null ? `${s.minAge}+ years` : s.maxAge != null ? `Up to ${s.maxAge} years` : "Any age";
+  const { lang, t } = useI18n();
+  const { scheme } = Route.useLoaderData();
+  const s = localizeScheme(scheme, lang);
+  const age = s.minAge != null && s.maxAge != null ? `${s.minAge}–${s.maxAge} ${t("years")}` : s.minAge != null ? `${s.minAge}+ ${t("years")}` : s.maxAge != null ? `${t("upTo")} ${s.maxAge} ${t("years")}` : t("anyAge");
   return (
     <main className="min-h-screen bg-background font-display">
       <div className="mx-auto max-w-4xl px-6 py-16">
-        <Link to="/home" hash="schemes" className="text-xs tracking-[0.3em] text-muted-foreground hover:text-foreground">← ALL SCHEMES</Link>
-        <p className="mt-12 text-xs tracking-[0.4em] text-primary">{s.category.toUpperCase()}</p>
+        <div className="mb-8 flex justify-end"><LanguageSwitcher /></div>
+         <Link to="/home" hash="schemes" className="text-xs tracking-[0.3em] text-muted-foreground hover:text-foreground">{t("allSchemes")}</Link>
+        <p className="mt-12 text-xs tracking-[0.4em] text-primary">{t(`cat:${s.category}`)}</p>
         <h1 className="mt-4 text-4xl font-light leading-tight sm:text-6xl">{s.name}</h1>
         <p className="mt-6 max-w-2xl text-lg font-light text-muted-foreground">{s.summary}</p>
 
         <dl className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border sm:grid-cols-3">
-          {[["LOCATION", s.location], ["AGE", age], ["FOR", s.audiences.join(", ")]].map(([k, v]) => (
+          {[[t("dLocation"), t(`loc:${s.location}`)], [t("dAge"), age], [t("dFor"), s.audiences.map((a) => t(`aud:${a}`)).join(", ")]].map(([k, v]) => (
             <div key={k} className="bg-card p-5">
               <dt className="text-[10px] tracking-[0.3em] text-muted-foreground">{k}</dt>
               <dd className="mt-2 font-light">{v}</dd>
@@ -75,28 +81,29 @@ function SchemePage() {
         </dl>
 
         <div className="mt-14">
-          <Block n="01" title="ELIGIBILITY" items={s.eligibility} />
-          <Block n="02" title="BENEFITS" items={s.benefits} />
-          <Block n="03" title="DOCUMENTS" items={s.documents} />
-          <Block n="04" title="HOW TO APPLY" items={s.steps} ordered />
+          <Block n="01" title={t("eligibility")} items={s.eligibility} />
+          <Block n="02" title={t("benefits")} items={s.benefits} />
+          <Block n="03" title={t("documents")} items={s.documents} />
+          <Block n="04" title={t("howApply")} items={s.steps} ordered />
         </div>
 
-        <SchemeQA key={s.slug} slug={s.slug} name={s.name} />
+        <SchemeQA key={`${s.slug}-${lang}`} slug={s.slug} name={s.name} />
 
         <div className="mt-10 rounded-2xl border p-5 text-sm font-light">
+           {lang !== "en" && <p className="mb-4 text-accent">{t("translationUnreviewed")}</p>}
           <p>
-            <span className="text-[10px] tracking-[0.3em] text-muted-foreground">SOURCE </span>
+            <span className="text-[10px] tracking-[0.3em] text-muted-foreground">{t("source")} </span>
             <a href={s.source} target="_blank" rel="noopener noreferrer" className="break-all text-primary underline-offset-4 hover:underline">{s.source.replace(/^https?:\/\//, "")}</a>
           </p>
           <p className="mt-2">
-            <span className="text-[10px] tracking-[0.3em] text-muted-foreground">LAST VERIFIED </span>
-            {s.verifiedOn ? new Date(s.verifiedOn).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : <span className="text-accent">Not yet verified against the official source</span>}
+            <span className="text-[10px] tracking-[0.3em] text-muted-foreground">{t("lastVerified")} </span>
+            {s.verifiedOn ? new Date(s.verifiedOn).toLocaleDateString(lang === "ta" ? "ta-IN" : lang === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short", year: "numeric" }) : <span className="text-accent">{t("notVerified")}</span>}
           </p>
         </div>
 
         <div className="mt-10 flex flex-wrap items-center gap-6 border-t pt-10">
-          <Link to="/home" hash="finder" className="cosmic-pill rounded-full px-7 py-3 text-xs tracking-[0.35em]">CHECK WHAT ELSE FITS ME</Link>
-          <p className="text-xs font-light text-muted-foreground">Details are a summary. Confirm with the official scheme office before applying.</p>
+          <Link to="/home" hash="finder" className="cosmic-pill rounded-full px-7 py-3 text-xs tracking-[0.35em]">{t("checkElse")}</Link>
+          <p className="text-xs font-light text-muted-foreground">{t("summaryNote")}</p>
         </div>
       </div>
     </main>

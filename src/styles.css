@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", "Noto Sans Tamil", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -117,3 +117,8 @@
   transition: border-color .5s, transform .5s, box-shadow .5s;
   &:hover { border-color: oklch(0.8 0.15 340 / 0.5); transform: translateY(-4px); box-shadow: 0 20px 50px -20px oklch(0.68 0.24 354 / 0.45); }
 }
+
+/* Script-safe typography: Tamil and Devanagari have connected glyphs. */
+html[lang="ta"] .font-display, html[lang="hi"] .font-display { line-height: 1.65; }
+html[lang="ta"] [class*="tracking-"], html[lang="hi"] [class*="tracking-"] { letter-spacing: 0; }
+html[lang="ta"] h1, html[lang="ta"] h2, html[lang="hi"] h1, html[lang="hi"] h2 { overflow-wrap: anywhere; line-height: 1.5; }

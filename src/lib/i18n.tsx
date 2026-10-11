@@ -11,6 +11,7 @@ export const LANGS: { code: Lang; label: string }[] = [
 export const LANG_NAMES: Record<Lang, string> = { en: "English", ta: "Tamil", hi: "Hindi" };
 
 const en = {
+  translationUnreviewed: "Tamil and Hindi summaries are AI translations, not official language documents; they have not been reviewed.",
   tagline: "Find the support you're entitled to — and the way to get it.",
   findMine: "FIND MY SCHEMES",
   howLabel: "HOW IT WORKS",
@@ -47,6 +48,7 @@ const en = {
 type Dict = typeof en;
 
 const ta: Dict = {
+  translationUnreviewed: "தமிழ் மற்றும் இந்தி சுருக்கங்கள் AI மொழிபெயர்ப்புகள்; அதிகாரப்பூர்வ மொழி ஆவணங்கள் அல்ல. இன்னும் மதிப்பாய்வு செய்யப்படவில்லை.",
   tagline: "உங்களுக்கு உரிய உதவியைக் கண்டறியுங்கள் — அதைப் பெறும் வழியையும்.",
   findMine: "என் திட்டங்களைக் கண்டறி",
   howLabel: "எப்படி செயல்படுகிறது",
@@ -82,6 +84,7 @@ const ta: Dict = {
 };
 
 const hi: Dict = {
+  translationUnreviewed: "तमिल और हिन्दी सारांश AI अनुवाद हैं, आधिकारिक भाषा दस्तावेज़ नहीं; इनकी समीक्षा अभी नहीं हुई है।",
   tagline: "जिस मदद के आप हक़दार हैं, उसे खोजें — और उसे पाने का रास्ता भी।",
   findMine: "मेरी योजनाएँ खोजें",
   howLabel: "यह कैसे काम करता है",
@@ -126,11 +129,12 @@ const STORAGE_KEY = "sahaaya-lang";
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    let saved: string | null = null;
+    try { saved = localStorage.getItem(STORAGE_KEY); } catch { /* Storage may be blocked. */ }
     if (saved === "ta" || saved === "hi" || saved === "en") setLangState(saved);
   }, []);
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
-  const setLang = (l: Lang) => { setLangState(l); localStorage.setItem(STORAGE_KEY, l); };
+  const setLang = (l: Lang) => { setLangState(l); try { localStorage.setItem(STORAGE_KEY, l); } catch { /* Keep selection for this visit. */ } };
   const t = (k: string, vars?: Record<string, string>) => {
     let s = (DICTS[lang] as Record<string, string>)[k] ?? (en as Record<string, string>)[k] ?? k;
     if (vars) for (const [a, b] of Object.entries(vars)) s = s.replace(`{${a}}`, b);
