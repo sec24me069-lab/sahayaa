@@ -26,7 +26,10 @@ function Home() {
   const steps = [1, 2, 3].map((n) => ({ n: `0${n}`, t: t(`step${n}t`), d: t(`step${n}d`) }));
   return (
     <main className="min-h-screen bg-background font-display animate-in fade-in duration-1000">
-      <div className="absolute inset-x-0 top-5 z-20 flex justify-center px-4 sm:justify-end sm:px-8"><LanguageSwitcher /></div>
+      <div className="absolute inset-x-0 top-5 z-20 flex flex-wrap items-center justify-center gap-3 px-4 sm:justify-end sm:px-8">
+        <Link to="/dashboard" className="cosmic-pill rounded-full px-4 py-2 text-xs tracking-[0.2em]">MY APPLICATIONS</Link>
+        <LanguageSwitcher />
+      </div>
       {/* Hero */}
       <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
         <img src={horizon} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50" />

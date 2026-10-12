@@ -5,6 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { getRecommendations } from "@/lib/recommend.functions";
 import { getScheme } from "@/lib/schemes";
+import { logEvent } from "@/lib/activity";
 
 type Item = { slug: string; match: "strong" | "possible"; reasons: string[]; check: string };
 
@@ -24,9 +25,10 @@ export function SchemeFinder() {
     e.preventDefault();
     if (loading) return;
     setLoading(true); setError(""); setItems(null);
+    logEvent("assessment_started");
     try {
       const r = await run({ data: { location: location.trim(), age: Number(age), needs: `${needs.trim()}\nPlease answer in ${LANG_NAMES[lang]}.` } });
-      if (r.ok) setItems(r.items); else setError(r.error);
+      if (r.ok) { setItems(r.items); logEvent("assessment_completed"); logEvent("matches_generated", r.items.length); } else setError(r.error);
     } catch {
       setError(t("checkDetails"));
     } finally { setLoading(false); }
