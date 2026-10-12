@@ -14,16 +14,164 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          match_count: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          match_count?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          match_count?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      application_documents: {
+        Row: {
+          application_id: string
+          created_at: string
+          done: boolean
+          id: string
+          name: string
+        }
+        Insert: {
+          application_id: string
+          created_at?: string
+          done?: boolean
+          id?: string
+          name: string
+        }
+        Update: {
+          application_id?: string
+          created_at?: string
+          done?: boolean
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_documents_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      application_messages: {
+        Row: {
+          application_id: string
+          body: string
+          created_at: string
+          from_official: boolean
+          id: string
+          sender_id: string
+        }
+        Insert: {
+          application_id: string
+          body: string
+          created_at?: string
+          from_official?: boolean
+          id?: string
+          sender_id?: string
+        }
+        Update: {
+          application_id?: string
+          body?: string
+          created_at?: string
+          from_official?: boolean
+          id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_messages_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      applications: {
+        Row: {
+          applicant_email: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          scheme_slug: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          applicant_email?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheme_slug: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          applicant_email?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheme_slug?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "official" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +298,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "official", "user"],
+    },
   },
 } as const
