@@ -43,7 +43,7 @@ function Dashboard() {
   const add = async () => {
     const s = getScheme(slug); if (!s) return;
     const { data: u } = await supabase.auth.getUser();
-    const { data, error } = await supabase.from("applications").insert({ scheme_slug: s.slug, user_id: u.user!.id, applicant_email: u.user!.email }).select("id").single();
+    const { data, error } = await supabase.from("applications").insert({ scheme_slug: s.slug, user_id: u.user!.id, applicant_email: u.user!.email ?? null }).select("id").single();
     if (error || !data) return;
     await supabase.from("application_documents").insert(s.documents.map((name) => ({ application_id: data.id, name })));
     setSlug(""); load();
