@@ -22,7 +22,7 @@ export const Route = createFileRoute("/home")({
 });
 
 function Home() {
-  const { lang, t } = useI18n();
+  const { t } = useI18n();
   const steps = [1, 2, 3].map((n) => ({ n: `0${n}`, t: t(`step${n}t`), d: t(`step${n}d`) }));
   return (
     <main className="min-h-screen bg-background font-display animate-in fade-in duration-1000">
