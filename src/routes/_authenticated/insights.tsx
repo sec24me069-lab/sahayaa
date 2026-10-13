@@ -6,6 +6,7 @@ import { SCHEMES, CATEGORIES, getScheme } from "@/lib/schemes";
 import { STATUSES, STATUS_LABEL } from "@/lib/activity";
 import { AppNav } from "@/components/AppNav";
 import { StaffOnly } from "./officials";
+import { Twin } from "@/components/DigitalTwin";
 
 export const Route = createFileRoute("/_authenticated/insights")({
   head: () => ({
@@ -69,6 +70,9 @@ function Insights() {
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <Chart title="Applications by status" data={byStatus} />
         <Chart title="Applications by category" data={byCategory} />
+      </div>
+      <Twin apps={d.apps} />
+      <div>
       </div>
     </div>
   );
