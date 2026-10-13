@@ -57,7 +57,7 @@ function Home() {
         </div>
       </section>
 
-      <SchemeFinder key={lang} />
+      <SchemeFinder />
 
       <SchemeDiscovery />
 
