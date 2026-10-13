@@ -6,6 +6,7 @@ import { SCHEMES, CATEGORIES, getScheme } from "@/lib/schemes";
 import { STATUSES, STATUS_LABEL } from "@/lib/activity";
 import { AppNav } from "@/components/AppNav";
 import { StaffOnly } from "./officials";
+import { Twin } from "@/components/DigitalTwin";
 
 export const Route = createFileRoute("/_authenticated/insights")({
   head: () => ({
