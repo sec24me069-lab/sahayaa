@@ -70,6 +70,9 @@ function Insights() {
         <Chart title="Applications by status" data={byStatus} />
         <Chart title="Applications by category" data={byCategory} />
       </div>
+      <Twin apps={d.apps} />
+      <div>
+      </div>
     </div>
   );
 }
