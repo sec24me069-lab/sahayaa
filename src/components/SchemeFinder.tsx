@@ -9,10 +9,14 @@ import { FORM, STATES, matchSchemes, missingText, reasonText, type Match, type P
 const field = "w-full rounded-xl border bg-card px-4 py-3 font-light text-foreground focus:border-primary focus:outline-none";
 const EMPTY: Profile = { state: "", age: null, gender: "", occupation: "", income: "", area: "", disability: "", needs: [] };
 
+/** Every form label this component reads, so the lookup stays type-safe under strict tsconfig. */
+const LABELS = ["unknown", "state", "Other", "age", "gender", "occupation", "income", "area", "disability", "needs", "find", "note", "none", "why", "missing"] as const;
+type Label = (typeof LABELS)[number];
+
 export function SchemeFinder() {
   const { lang, t } = useI18n();
-  const fAll = FORM[lang] as Record<string, string>;
-  const f = fAll as Record<"unknown" | "state" | "Other" | "age" | "gender" | "occupation" | "income" | "area" | "disability" | "needs" | "find" | "note" | "none" | "why" | "missing", string>;
+  const src = FORM[lang] as Record<string, string>;
+  const f = Object.fromEntries(LABELS.map((k) => [k, src[k] ?? k])) as Record<Label, string>;
   const [p, setP] = useState<Profile>(EMPTY);
   const [items, setItems] = useState<Match[] | null>(null);
   const set = <K extends keyof Profile>(k: K, v: Profile[K]) => setP((x) => ({ ...x, [k]: v }));
@@ -31,7 +35,7 @@ export function SchemeFinder() {
       <span className="mb-2 block text-xs tracking-[0.25em] text-muted-foreground">{label}</span>
       <select value={p[k] as string} onChange={(e) => set(k, e.target.value as never)} className={field}>
         <option value="">{f.unknown}</option>
-        {opts.map((o) => <option key={o} value={o}>{f[o] ?? o}</option>)}
+        {opts.map((o) => <option key={o} value={o}>{src[o] ?? o}</option>)}
       </select>
     </label>
   );
