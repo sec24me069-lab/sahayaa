@@ -11,8 +11,7 @@ const EMPTY: Profile = { state: "", age: null, gender: "", occupation: "", incom
 
 export function SchemeFinder() {
   const { lang, t } = useI18n();
-  const fAll = FORM[lang] as Record<string, string>;
-  const f = fAll as Record<"unknown" | "state" | "Other" | "age" | "gender" | "occupation" | "income" | "area" | "disability" | "needs" | "find" | "note" | "none" | "why" | "missing", string>;
+  const f = FORM[lang] as Record<string, string>;
   const [p, setP] = useState<Profile>(EMPTY);
   const [items, setItems] = useState<Match[] | null>(null);
   const set = <K extends keyof Profile>(k: K, v: Profile[K]) => setP((x) => ({ ...x, [k]: v }));
